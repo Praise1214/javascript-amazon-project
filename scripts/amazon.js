@@ -1,4 +1,4 @@
-import {cart} from '../data/cart.js'
+import {cart, addtoCart} from '../data/cart.js'
 import {products} from '../data/products.js';
 let productsHTML = '';
 
@@ -62,13 +62,37 @@ document.querySelector('.js-products-grid').innerHTML = productsHTML;
 
 const addedMessageTimeout = {};
 
-document.querySelectorAll('.js-add-to-cart').forEach((button) => {button.addEventListener('click', () => {
 
+
+
+
+function updateCartQuantity() {
+  let cartQuantity = 0;
+
+  cart.forEach((item) => {
+    cartQuantity += item.quantity;
+  })
+
+  document.querySelector('.js-cart-quantity').innerHTML = cartQuantity
+}
+
+
+
+document.querySelectorAll('.js-add-to-cart').forEach((button) => {button.addEventListener('click', () => {
+      
     const productId = button.dataset.productId;
 
-      const quantitySelector = document.querySelector(`.js-quantity-selector-${button.dataset.productId}`)
+    const quantitySelector = document.querySelector(`.js-quantity-selector-${button.dataset.productId}`)
 
-      const quantity = Number(quantitySelector.value)
+    const quantity = Number(quantitySelector.value);
+    
+    addtoCart(productId, quantity);
+
+    updateCartQuantity();
+
+      
+
+      
 
       const quantityAdd = document.querySelector(`.js-added-${button.dataset.productId}`)
 
@@ -85,30 +109,9 @@ document.querySelectorAll('.js-add-to-cart').forEach((button) => {button.addEven
       }, 2000)
       
       addedMessageTimeout[productId] = timeoutId
-        let matchingItem;
-        cart.forEach((item) => {
-          if(productId === item.productId){
-            matchingItem = item;
-          };
-        });
+        
 
-        if (matchingItem) {
-          matchingItem.quantity += quantity;
-        }
-        else {
-          cart.push({
-            productId,
-            quantity,
-          })
-        }
-
-        let cartQuantity = 0;
-
-        cart.forEach((item) => {
-          cartQuantity += item.quantity;
-        })
-
-        document.querySelector('.js-cart-quantity').innerHTML = cartQuantity
+        
 
 })
 })
