@@ -1,3 +1,4 @@
+import { validDeliveryOption } from "./deliveryOptions.js";
 export let cart;
 
 loadFromStorage();
@@ -25,7 +26,7 @@ export function savetoStorage() {
 }
 
 
-export function addtoCart(productId, quantity) {
+export function addtoCart(productId) {
     let matchingItem;
       cart.forEach((cartItem) => {
         if(productId === cartItem.productId){
@@ -38,9 +39,9 @@ export function addtoCart(productId, quantity) {
       }
       else {
         cart.push({
-          productId,
+          productId : productId,
           quantity: 1,
-          deliveryOptionId: 1,
+          deliveryOptionId: '1',
         })
       }
 
@@ -71,7 +72,13 @@ export function addtoCart(productId, quantity) {
           matchingItem = cartItem;
         };
       });
+      if(!matchingItem){
+        return
+      }
 
+      if(!validDeliveryOption(deliveryOptionId)) {
+        return
+      }
       matchingItem.deliveryOptionId = deliveryOptionId;
       savetoStorage();
   }
