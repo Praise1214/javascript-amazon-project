@@ -7,6 +7,25 @@ import { loadCart } from '../data/cart.js';
 // import '../data/backend-practice.js'
 
 
+async function loadPage() {
+    await loadProductsFetch();
+
+    const value = await new Promise((resolve) => {
+        loadCart(() => {
+            resolve('value 3'); //the value 3 will be saved in the value function
+        })
+    })
+
+    renderCheckoutHeader();
+    renderOrderSummary();
+    renderPaymentSummary();
+
+    
+}
+loadPage()
+
+
+/*
 Promise.all([
     loadProductsFetch(),
 
@@ -21,6 +40,8 @@ Promise.all([
         renderOrderSummary();
         renderPaymentSummary();
 })
+*/
+
 /*
 new Promise((resolve) => {
     loadProducts(() => {
